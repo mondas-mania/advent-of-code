@@ -1,4 +1,5 @@
 .DS_Store
+*.code-workspace
 
 # https://github.com/github/gitignore/blob/main/Python.gitignore
 # Byte-compiled / optimized / DLL files
