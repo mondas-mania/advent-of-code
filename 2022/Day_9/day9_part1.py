@@ -27,7 +27,7 @@ def get_tail_positions(head_pos: tuple, tail_pos: tuple, movement: tuple):
     
   return head_pos, tail_pos, new_tail_history
 
-input_file = open('input_test.txt', 'r')
+input_file = open('input.txt', 'r')
 movements = [(movement.split(' ')[0], int(movement.split(' ')[1])) for movement in input_file.read().rstrip().split('\n')]
 
 head_pos = (0, 0)
@@ -35,7 +35,6 @@ tail_pos = (0, 0)
 tail_history = [tail_pos]
 
 for movement in movements:
-  # Head and Tail positions will update in place
   head_pos, tail_pos, new_tail_history = get_tail_positions(head_pos, tail_pos, movement)
   tail_history += new_tail_history
 
