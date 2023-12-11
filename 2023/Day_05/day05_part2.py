@@ -1,4 +1,4 @@
-file_name = "input_test.txt"
+file_name = "input.txt"
 seed_conversion_maps = {}
 
 def get_destination_value(conversion_list: list, input: int) -> int:
