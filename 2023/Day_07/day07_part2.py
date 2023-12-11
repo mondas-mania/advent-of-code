@@ -31,13 +31,6 @@ strength_values = {
 def get_strength(hand: list) -> int:
   counts = Counter(hand)
   unique_cards = len(counts.keys())
-  # if "J" in hand:
-  #   if unique_cards <= 2:
-  #     # can be made to 5 of a kind
-  #     return 6
-  #   elif unique_cards == 3 and 
-  #   # TBC 
-  # else:
   if unique_cards == 1:
     # five of a kind
     return 6
@@ -87,7 +80,6 @@ def get_hand_value(hand: list) -> int:
     # ensures an earlier card will always have more weight
     sum += card_values[hand[i]] * 14**(5-i)
 
-
   hand_permutations = replace_joker(hand)
   hand_strengths = [get_strength(hand_permutation) for hand_permutation in hand_permutations]
   
@@ -105,4 +97,3 @@ hand_values = {hand: get_hand_value(list(hand)) for hand in original_bets.keys()
 sorted_list = sorted([[k, v] for k, v in hand_values.items()], key=lambda x: x[1])
 multiplied_bets = {hand[0]: original_bets[hand[0]] * (i + 1) for i, hand in enumerate(sorted_list)}
 print(f"The total sum of winnings is {sum(list(multiplied_bets.values()))}")
-None
