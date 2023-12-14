@@ -17,7 +17,7 @@ def get_valid_neighbours(pos: tuple, grid: list) -> list:
     case "S":
       possible_neighbours = [possible for possible in [(row, col - 1), (row, col + 1), (row - 1, col), (row + 1, col)] if is_valid_pos(possible, grid)]
       for neighbour in possible_neighbours:
-        # if current pos is a valid neighbour of a neihgbouring cell then it's a valid destination
+        # if current pos is a valid neighbour of a neighbouring cell then it's a valid destination
         if pos in get_valid_neighbours(neighbour, grid):
           valid_neighbours.append(neighbour)
     case "|":
@@ -49,7 +49,6 @@ def find_farthest(starting_pos: tuple, grid: list) -> int:
       paths[i].append(next_steps[i])
       next_steps[i] = neighbours[0]
   
-
   # print(f"Reached {next_steps[0]} after {len(paths[0])} with paths {paths[0]} and {paths[1]}")
   print(f"Reached {next_steps[0]} after {len(paths[0])}")
   return len(paths[0])
