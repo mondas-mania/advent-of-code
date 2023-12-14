@@ -1,8 +1,8 @@
 file_name = "input.txt"
 
-def get_distance(pos_1: tuple, pos_2: tuple):
-  x_dist = abs(pos_1[0] - pos_2[0])
-  y_dist = abs(pos_1[1] - pos_2[1])
+def get_distance(pos_1: tuple, pos_2: tuple) -> int:
+  y_dist = abs(pos_1[0] - pos_2[0])
+  x_dist = abs(pos_1[1] - pos_2[1])
   return x_dist + y_dist
 
 def copy_grid(grid: list) -> list:
