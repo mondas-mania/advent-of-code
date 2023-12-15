@@ -15,5 +15,3 @@ hash_values = [get_hash(seq) for seq in init_seq]
 total = sum(hash_values)
 
 print(f"The sum of all the hashes is {total}")
-
-None
