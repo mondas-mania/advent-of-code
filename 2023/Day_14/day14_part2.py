@@ -1,23 +1,13 @@
-file_name = "input_test.txt"
+file_name = "input.txt"
 
 def rotate_dish_clockwise(dish: list) -> list:
   dish_size = len(dish)
-  new_dish = []
-  for i, row in enumerate(dish):
-    new_row = []
-    for j in range(len((row))):
-      new_row.append(dish[j][dish_size - 1 - i])
-    new_dish.append(new_row)
+  new_dish = [[dish[j][dish_size - 1 - i] for j in range(len(dish[i]))] for i in range(dish_size)]
   return new_dish
 
 def rotate_dish_anticlockwise(dish: list) -> list:
   dish_size = len(dish[0])
-  new_dish = []
-  for i, row in enumerate(dish):
-    new_row = []
-    for j in range(len(row)):
-      new_row.append(dish[dish_size - 1 - j][i])
-    new_dish.append(new_row)
+  new_dish = [[dish[dish_size - 1 - j][i] for j in range(len(dish[i]))] for i in range(dish_size)]
   return new_dish
 
 def copy_dish(dish: list) -> list:
@@ -59,16 +49,40 @@ input_file = open(file_name, 'r')
 dish = [list(line) for line in input_file.read().rstrip().split('\n')]
 
 spun_dish = copy_dish(dish)
-for i in range(1000000000):
+shorter_spins = 150
+full_spins = 1000000000
+loads = []
+loop_length = 0
+loop_start = 0
+loop = []
+
+# The loads begin to loop after a while so best to record them all
+# in a much smaller sample size (150 is arbitrary in this case)
+# as 1000000000 cycles is not at all feasible
+for i in range(shorter_spins):
   original_spun_dish = copy_dish(spun_dish)
   spun_dish = spin_cycle(spun_dish)
-  if original_spun_dish == spun_dish:
-    print(f"Breaking after {i} iterations")
+  loads.append(get_load(spun_dish))
+
+# We need to identify the length of the loop starting from the end of the recorded loads
+for i in range(1, int(shorter_spins/2)):
+  if loads[-i:] == loads[-i * 2:-i]:
+    print(f"Loop at {i} of \n {loads[-i * 2:-i]} ")
+    loop_length = i
     break
 
+# Once we have a length we can determine the start of the loop 
+# (it doesn't begin looping for a while),
+# and determine the full loop itself
+for i in range(1, int(shorter_spins - loop_length)):
+  if loads[i:i+loop_length] == loads[i+loop_length: i+(loop_length*2)]:
+    loop = loads[i: i+loop_length]
+    loop_start = i
+    break
 
-total = get_load(spun_dish)
+# Using this loop we can project that forward to its position
+# with 1000000000 spin cycles
+pos = ((full_spins - loop_start) % loop_length) - 1
+final_total = loop[pos]
 
-print(f"The total load on the north-tilted dish is {total}")
-
-None
+print(f"The final total load on the north-tilted dish is {final_total}")
