@@ -1,4 +1,4 @@
-file_name = "input_test.txt"
+file_name = "input.txt"
 
 def is_valid_pos(pos: tuple, loss_map: list) -> bool:
   max_row = len(loss_map)
@@ -45,16 +45,17 @@ def get_heat_loss(path: list, loss_map: list) -> int:
   heat_loss = sum([loss_map[pos[0]][pos[1]] for pos in path])
   return heat_loss
 
+def get_str_pos(pos: tuple) -> str:
+  return ",".join([str(pos[0]), str(pos[1])])
+
 
 def find_best_path(start_pos: tuple, end_pos: list, loss_map: list) -> list:
   best_path = []
-  lowest_loss = -1
   paths = [[start_pos]]
 
-  # far too unoptimized
-  # if i store visited nodes that can cull it but i'd need to track directions
-  # then again the direction won't massively matter
-  # map of pos: lowest heat loss?
+  visited = {
+    get_str_pos(start_pos): loss_map[start_pos[0]][start_pos[1]]
+  }
 
   while len(paths) > 0:
     new_paths = []
@@ -65,17 +66,23 @@ def find_best_path(start_pos: tuple, end_pos: list, loss_map: list) -> list:
         new_path = path.copy()
         new_path.append(neighbour)
         heat_loss = get_heat_loss(new_path, loss_map)
-        if lowest_loss == -1 or heat_loss < lowest_loss:
-          if neighbour == end_pos:
-            best_path = new_path
-            lowest_loss = heat_loss
-          else:
-            new_paths.append(new_path)
+
+        str_neighbour = get_str_pos(neighbour)
+        if str_neighbour in visited:
+          if heat_loss > visited[str_neighbour]:
+            continue
+
+        visited[str_neighbour] = heat_loss
+
+        if neighbour == end_pos:
+          best_path = new_path
+        else:
+          new_paths.append(new_path)
 
     paths = new_paths  
 
   return best_path
-  pass
+
 
 input_file = open(file_name, 'r')
 loss_dot_jpeg = [[int(val) for val in list(line)] for line in input_file.read().rstrip().split('\n')]
@@ -83,8 +90,11 @@ loss_dot_jpeg = [[int(val) for val in list(line)] for line in input_file.read().
 starting_pos = (0,0)
 end_pos = (len(loss_dot_jpeg) - 1, len(loss_dot_jpeg[0]) - 1)
 
-test_path = [(0,0), (1,0), (1,1)]
-x = get_possible_neighbours(test_path, loss_dot_jpeg)
+best_path = find_best_path(starting_pos, end_pos, loss_dot_jpeg)
+lowest_loss = get_heat_loss(best_path, loss_dot_jpeg)
 
-y = find_best_path(starting_pos, end_pos, loss_dot_jpeg)
+print(f"\nThe least heat loss possible is {lowest_loss}")
+
+depiction = ''.join([''.join(["#" if (row, col) in best_path else "." for col in range(len(loss_dot_jpeg[0]))] + ["\n"]) for row in range(len(loss_dot_jpeg))])
+print(f"{depiction}")
 None
