@@ -1,4 +1,4 @@
-file_name = "input_test.txt"
+file_name = "input.txt"
 
 
 def get_highest_values(bricks: list) -> tuple:
@@ -75,6 +75,11 @@ def is_on_ground(brick: list) -> bool:
 
 
 def settle_bricks(bricks: list) -> list:
+  # needs optimization
+  # need a dictionary of which bricks support which
+  # and the inverse
+  # only need to cycle through the ones that are affected in a loop 
+  # (i.e. that lose a support or are moved so need to update which ones they support)
   to_settle = True
   settled_bricks = bricks.copy()
   while to_settle:
@@ -96,11 +101,11 @@ input_file = open(file_name, 'r')
 bricks = [[tuple([int(pos) for pos in coords.split(",")]) for coords in line.split("~")] for line in input_file.read().rstrip().split('\n')]
 
 sorted_bricks = sort_bricks(bricks)
-settled_bricks = settle_bricks(bricks)
+settled_bricks = settle_bricks(sorted_bricks[0:])
 
-string_bricks_x = plot_bricks(settled_bricks[0:26], "x")
-string_bricks_y = plot_bricks(settled_bricks[0:26], "y")
-string_bricks_x_y = plot_bricks(settled_bricks[0:26], "x", "y")
+string_bricks_x = plot_bricks(settled_bricks[0:], "x")
+string_bricks_y = plot_bricks(settled_bricks[0:], "y")
+string_bricks_x_y = plot_bricks(settled_bricks[0:], "x", "y")
 print()
 print(string_bricks_x)
 print()
